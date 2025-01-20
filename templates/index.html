@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Evaluation System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+        }
+        
+        body {
+            padding: 0;
+            margin: 0;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            padding: 40px 20px;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+        }
+
+        .header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .feature-icon {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        .btn-predict {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .prediction-result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .prediction-result h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .prediction-value {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: '\f107';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <div class="header">
+                <h2><i class="fas fa-car"></i> Car Evaluation System</h2>
+                <p>Enter your car's specifications to get an evaluation</p>
+            </div>
+            
+            <form method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="buying_price"><i class="fas fa-tag feature-icon"></i>Buying Price</label>
+                        <div class="select-wrapper">
+                            <select class="form-control" name="buying_price" id="buying_price" required>
+                                <option value="vhigh" {% if form_data.buying_price == 'vhigh' %}selected{% endif %}>Very High</option>
+                                <option value="high" {% if form_data.buying_price == 'high' %}selected{% endif %}>High</option>
+                                <option value="med" {% if form_data.buying_price == 'med' %}selected{% endif %}>Medium</option>
+                                <option value="low" {% if form_data.buying_price == 'low' %}selected{% endif %}>Low</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="maintenance_price"><i class="fas fa-wrench feature-icon"></i>Maintenance Price</label>
+                        <div class="select-wrapper">
+                            <select class="form-control" name="maintenance_price" id="maintenance_price" required>
+                                <option value="vhigh" {% if form_data.maintenance_price == 'vhigh' %}selected{% endif %}>Very High</option>
+                                <option value="high" {% if form_data.maintenance_price == 'high' %}selected{% endif %}>High</option>
+                                <option value="med" {% if form_data.maintenance_price == 'med' %}selected{% endif %}>Medium</option>
+                                <option value="low" {% if form_data.maintenance_price == 'low' %}selected{% endif %}>Low</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="doors"><i class="fas fa-door-open feature-icon"></i>Number of Doors</label>
+                        <div class="select-wrapper">
+                            <select class="form-control" name="doors" id="doors" required>
+                                <option value="2" {% if form_data.doors == '2' %}selected{% endif %}>2 Doors</option>
+                                <option value="3" {% if form_data.doors == '3' %}selected{% endif %}>3 Doors</option>
+                                <option value="4" {% if form_data.doors == '4' %}selected{% endif %}>4 Doors</option>
+                                <option value="5" {% if form_data.doors == '5' %}selected{% endif %}>5 Doors</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="capacity"><i class="fas fa-users feature-icon"></i>Passenger Capacity</label>
+                        <div class="select-wrapper">
+                            <select class="form-control" name="capacity" id="capacity" required>
+                                <option value="2" {% if form_data.capacity == '2' %}selected{% endif %}>2 Persons</option>
+                                <option value="4" {% if form_data.capacity == '4' %}selected{% endif %}>4 Persons</option>
+                                <option value="5" {% if form_data.capacity == '5' %}selected{% endif %}>5 Persons</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="luggage_boot"><i class="fas fa-suitcase feature-icon"></i>Luggage Boot Size</label>
+                        <div class="select-wrapper">
+                            <select class="form-control" name="luggage_boot" id="luggage_boot" required>
+                                <option value="small" {% if form_data.luggage_boot == 'small' %}selected{% endif %}>Small</option>
+                                <option value="med" {% if form_data.luggage_boot == 'med' %}selected{% endif %}>Medium</option>
+                                <option value="big" {% if form_data.luggage_boot == 'big' %}selected{% endif %}>Big</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="safety"><i class="fas fa-shield-alt feature-icon"></i>Safety Rating</label>
+                        <div class="select-wrapper">
+                            <select class="form-control" name="safety" id="safety" required>
+                                <option value="low" {% if form_data.safety == 'low' %}selected{% endif %}>Low</option>
+                                <option value="med" {% if form_data.safety == 'med' %}selected{% endif %}>Medium</option>
+                                <option value="high" {% if form_data.safety == 'high' %}selected{% endif %}>High</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-predict">
+                    <i class="fas fa-calculator"></i> Evaluate Car
+                </button>
+            </form>
+
+            {% if prediction %}
+            <div class="prediction-result">
+                <h4><i class="fas fa-chart-bar"></i> Evaluation Result</h4>
+                <div class="prediction-value">
+                    {% if prediction == 'unacc' %}
+                        <i class="fas fa-times-circle" style="color: #e74c3c;"></i> Unacceptable
+                    {% elif prediction == 'acc' %}
+                        <i class="fas fa-check-circle" style="color: #2ecc71;"></i> Acceptable
+                    {% elif prediction == 'good' %}
+                        <i class="fas fa-star" style="color: #f1c40f;"></i> Good
+                    {% elif prediction == 'vgood' %}
+                        <i class="fas fa-trophy" style="color: #f39c12;"></i> Very Good
+                    {% else %}
+                        {{ prediction }}
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
